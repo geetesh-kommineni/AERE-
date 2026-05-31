@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { NextResponse } from "next/server";
+import { getDb } from "@/lib/db";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 // 30s TTL Collections Cache
 const cache = new Map();
@@ -25,21 +25,21 @@ export async function GET(request) {
   if (cachedData) {
     return NextResponse.json(cachedData, {
       headers: {
-        'X-Cache': 'HIT',
-        'Cache-Control': 'public, max-age=30, stale-while-revalidate=15'
-      }
+        "X-Cache": "HIT",
+        "Cache-Control": "public, max-age=30, stale-while-revalidate=15",
+      },
     });
   }
 
   const db = getDb();
-  const collections = db.prepare('SELECT * FROM collections ORDER BY id').all();
+  const collections = db.prepare("SELECT * FROM collections ORDER BY id").all();
   const responseData = { collections };
   setCached(cacheKey, responseData);
 
   return NextResponse.json(responseData, {
     headers: {
-      'X-Cache': 'MISS',
-      'Cache-Control': 'public, max-age=30, stale-while-revalidate=15'
-    }
+      "X-Cache": "MISS",
+      "Cache-Control": "public, max-age=30, stale-while-revalidate=15",
+    },
   });
 }

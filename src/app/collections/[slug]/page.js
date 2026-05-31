@@ -1,22 +1,25 @@
-import ClientPage from './ClientPage';
-import { getDb } from '@/lib/db';
+import ClientPage from "./ClientPage";
+import { getDb } from "@/lib/db";
 
 export async function generateMetadata({ params }) {
   const db = getDb();
-  
+
   // AÉRE uses Next 16. Destructure the param carefully by awaiting.
   const { slug } = await params;
 
-  const collection = db.prepare('SELECT * FROM collections WHERE slug = ?').get(slug);
+  const collection = db
+    .prepare("SELECT * FROM collections WHERE slug = ?")
+    .get(slug);
 
   if (!collection) {
     return {
-      title: 'Collection Not Found — AÉRE',
-      description: 'The requested collection could not be found.',
+      title: "Collection Not Found — AÉRE",
+      description: "The requested collection could not be found.",
     };
   }
 
-  let mainImage = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80&auto=format';
+  let mainImage =
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80&auto=format";
   try {
     if (collection.image) mainImage = collection.image;
   } catch (e) {}
@@ -35,10 +38,10 @@ export async function generateMetadata({ params }) {
           alt: collection.name,
         },
       ],
-      type: 'website',
+      type: "website",
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: `${collection.name} — AÉRE`,
       description: collection.description,
       images: [mainImage],

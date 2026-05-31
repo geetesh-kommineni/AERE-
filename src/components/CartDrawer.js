@@ -1,9 +1,9 @@
-'use client';
-import { useMemo, useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { useCart } from '@/context/CartContext';
+"use client";
+import { useMemo, useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { useCart } from "@/context/CartContext";
 
 const FREE_SHIPPING_THRESHOLD = 5000;
 
@@ -19,7 +19,9 @@ function ShippingProgress({ subtotal }) {
           <span>✓ You've unlocked complimentary shipping</span>
         ) : (
           <>
-            <span>₹{remaining.toLocaleString('en-IN')} away from free shipping</span>
+            <span>
+              ₹{remaining.toLocaleString("en-IN")} away from free shipping
+            </span>
           </>
         )}
       </div>
@@ -34,12 +36,21 @@ function ShippingProgress({ subtotal }) {
 }
 
 export default function CartDrawer() {
-  const { cart, removeFromCart, updateQuantity, subtotal, shipping, total, isDrawerOpen, setIsDrawerOpen } = useCart();
+  const {
+    cart,
+    removeFromCart,
+    updateQuantity,
+    subtotal,
+    shipping,
+    total,
+    isDrawerOpen,
+    setIsDrawerOpen,
+  } = useCart();
   const [giftWrap, setGiftWrap] = useState(false);
 
   const itemCount = useMemo(
     () => cart.reduce((sum, item) => sum + item.quantity, 0),
-    [cart]
+    [cart],
   );
 
   const isGiftWrapEligible = subtotal >= 5000;
@@ -52,44 +63,123 @@ export default function CartDrawer() {
 
   return (
     <>
-      <div className={`cart-overlay ${isDrawerOpen ? 'open' : ''}`} onClick={() => setIsDrawerOpen(false)} />
-      <div className={`cart-drawer ${isDrawerOpen ? 'open' : ''}`}>
+      <div
+        className={`cart-overlay ${isDrawerOpen ? "open" : ""}`}
+        onClick={() => setIsDrawerOpen(false)}
+      />
+      <div className={`cart-drawer ${isDrawerOpen ? "open" : ""}`}>
         <div className="cart-header">
-          <h3>Your Bag {itemCount > 0 && <span style={{ fontSize: '.75rem', fontWeight: 300, color: 'var(--taupe)', fontFamily: 'var(--sans)', letterSpacing: '.08em' }}>({itemCount})</span>}</h3>
-          <button className="close-btn" onClick={() => setIsDrawerOpen(false)} aria-label="Close bag">✕</button>
+          <h3>
+            Your Bag{" "}
+            {itemCount > 0 && (
+              <span
+                style={{
+                  fontSize: ".75rem",
+                  fontWeight: 300,
+                  color: "var(--taupe)",
+                  fontFamily: "var(--sans)",
+                  letterSpacing: ".08em",
+                }}
+              >
+                ({itemCount})
+              </span>
+            )}
+          </h3>
+          <button
+            className="close-btn"
+            onClick={() => setIsDrawerOpen(false)}
+            aria-label="Close bag"
+          >
+            ✕
+          </button>
         </div>
 
         <div className="cart-items">
           {cart.length === 0 ? (
             <div className="cart-empty">
-              <div style={{ fontSize: '2.5rem', marginBottom: '1rem', opacity: 0.3 }}>♢</div>
+              <div
+                style={{
+                  fontSize: "2.5rem",
+                  marginBottom: "1rem",
+                  opacity: 0.3,
+                }}
+              >
+                ♢
+              </div>
               Your bag is beautifully empty.
-              <div style={{ fontSize: '.7rem', fontStyle: 'normal', fontFamily: 'var(--sans)', letterSpacing: '.1em', textTransform: 'uppercase', marginTop: '1.5rem' }}>
-                <Link href="/collections" onClick={() => setIsDrawerOpen(false)} style={{ color: 'var(--rose)', textDecoration: 'none', borderBottom: '1px solid var(--rose)', paddingBottom: '2px' }}>
+              <div
+                style={{
+                  fontSize: ".7rem",
+                  fontStyle: "normal",
+                  fontFamily: "var(--sans)",
+                  letterSpacing: ".1em",
+                  textTransform: "uppercase",
+                  marginTop: "1.5rem",
+                }}
+              >
+                <Link
+                  href="/collections"
+                  onClick={() => setIsDrawerOpen(false)}
+                  style={{
+                    color: "var(--rose)",
+                    textDecoration: "none",
+                    borderBottom: "1px solid var(--rose)",
+                    paddingBottom: "2px",
+                  }}
+                >
                   Explore Collections
                 </Link>
               </div>
             </div>
           ) : (
-            cart.map(item => (
+            cart.map((item) => (
               <div className="cart-item" key={item.key}>
                 <div className="cart-item-img">
-                  {item.image && <Image src={item.image} alt={item.name} fill sizes="80px" style={{ objectFit: 'cover' }} />}
+                  {item.image && (
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      sizes="80px"
+                      style={{ objectFit: "cover" }}
+                    />
+                  )}
                 </div>
                 <div className="cart-item-info">
                   <div className="cart-item-name">{item.name}</div>
                   <div className="cart-item-detail">
                     {item.size && `Size: ${item.size}`}
-                    {item.size && item.color && ' · '}
+                    {item.size && item.color && " · "}
                     {item.color && `Color: ${item.color}`}
                   </div>
                   <div className="cart-item-qty">
-                    <button onClick={() => updateQuantity(item.key, item.quantity - 1)} aria-label="Decrease quantity">−</button>
+                    <button
+                      onClick={() =>
+                        updateQuantity(item.key, item.quantity - 1)
+                      }
+                      aria-label="Decrease quantity"
+                    >
+                      −
+                    </button>
                     <span>{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.key, item.quantity + 1)} aria-label="Increase quantity">+</button>
+                    <button
+                      onClick={() =>
+                        updateQuantity(item.key, item.quantity + 1)
+                      }
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
                   </div>
-                  <div className="cart-item-price">₹{(item.price * item.quantity).toLocaleString('en-IN')}</div>
-                  <button className="cart-item-remove" onClick={() => removeFromCart(item.key)}>Remove</button>
+                  <div className="cart-item-price">
+                    ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                  </div>
+                  <button
+                    className="cart-item-remove"
+                    onClick={() => removeFromCart(item.key)}
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             ))
@@ -101,56 +191,63 @@ export default function CartDrawer() {
 
           {/* Artisan Gift Wrapping Selection */}
           {cart.length > 0 && (
-            <div style={{
-              borderTop: '1px solid var(--border-subtle)',
-              borderBottom: '1px solid var(--border-subtle)',
-              padding: '1.25rem 0',
-              margin: '1rem 0',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.75rem'
-            }}>
-              <label style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '0.75rem',
-                cursor: isGiftWrapEligible ? 'pointer' : 'not-allowed',
-                opacity: isGiftWrapEligible ? 1 : 0.6,
-                userSelect: 'none'
-              }}>
+            <div
+              style={{
+                borderTop: "1px solid var(--border-subtle)",
+                borderBottom: "1px solid var(--border-subtle)",
+                padding: "1.25rem 0",
+                margin: "1rem 0",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.75rem",
+              }}
+            >
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "0.75rem",
+                  cursor: isGiftWrapEligible ? "pointer" : "not-allowed",
+                  opacity: isGiftWrapEligible ? 1 : 0.6,
+                  userSelect: "none",
+                }}
+              >
                 <input
                   type="checkbox"
                   checked={giftWrap}
                   disabled={!isGiftWrapEligible}
                   onChange={(e) => setGiftWrap(e.target.checked)}
                   style={{
-                    marginTop: '0.15rem',
-                    accentColor: 'var(--rose)',
-                    cursor: isGiftWrapEligible ? 'pointer' : 'not-allowed'
+                    marginTop: "0.15rem",
+                    accentColor: "var(--rose)",
+                    cursor: isGiftWrapEligible ? "pointer" : "not-allowed",
                   }}
                 />
                 <div style={{ flex: 1 }}>
-                  <span style={{
-                    fontFamily: 'var(--sans)',
-                    fontSize: '0.78rem',
-                    letterSpacing: '0.05em',
-                    fontWeight: 500,
-                    color: 'var(--ink)',
-                    display: 'block'
-                  }}>
+                  <span
+                    style={{
+                      fontFamily: "var(--sans)",
+                      fontSize: "0.78rem",
+                      letterSpacing: "0.05em",
+                      fontWeight: 500,
+                      color: "var(--ink)",
+                      display: "block",
+                    }}
+                  >
                     Artisan Gift Wrapping
                   </span>
-                  <span style={{
-                    fontSize: '0.7rem',
-                    color: 'var(--stone)',
-                    lineHeight: 1.4,
-                    display: 'block',
-                    marginTop: '0.2rem'
-                  }}>
-                    {isGiftWrapEligible 
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      color: "var(--stone)",
+                      lineHeight: 1.4,
+                      display: "block",
+                      marginTop: "0.2rem",
+                    }}
+                  >
+                    {isGiftWrapEligible
                       ? "Complimentary Jaipur cotton paper & hand-tied dried botanical twig."
-                      : `Add ₹${(5000 - subtotal).toLocaleString('en-IN')} more to unlock complimentary artisan packaging.`
-                    }
+                      : `Add ₹${(5000 - subtotal).toLocaleString("en-IN")} more to unlock complimentary artisan packaging.`}
                   </span>
                 </div>
               </label>
@@ -159,22 +256,37 @@ export default function CartDrawer() {
               {giftWrap && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
+                  animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: 'rgba(201, 146, 122, 0.05)',
-                    padding: '0.75rem',
-                    border: '1px dashed var(--rose)',
-                    marginTop: '0.25rem',
-                    gap: '1rem'
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "rgba(201, 146, 122, 0.05)",
+                    padding: "0.75rem",
+                    border: "1px dashed var(--rose)",
+                    marginTop: "0.25rem",
+                    gap: "1rem",
                   }}
                 >
-                  <svg width="50" height="35" viewBox="0 0 50 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="12" y="10" width="26" height="20" stroke="var(--stone)" strokeWidth="1" fill="none" opacity="0.3" />
+                  <svg
+                    width="50"
+                    height="35"
+                    viewBox="0 0 50 35"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      x="12"
+                      y="10"
+                      width="26"
+                      height="20"
+                      stroke="var(--stone)"
+                      strokeWidth="1"
+                      fill="none"
+                      opacity="0.3"
+                    />
                     <motion.path
                       d="M12 20H38"
                       stroke="var(--rose)"
@@ -201,7 +313,15 @@ export default function CartDrawer() {
                       transition={{ duration: 0.5, delay: 0.4 }}
                     />
                   </svg>
-                  <span style={{ fontSize: '0.68rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rose)', fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontSize: "0.68rem",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "var(--rose)",
+                      fontWeight: 500,
+                    }}
+                  >
                     Artisan Box Prepared
                   </span>
                 </motion.div>
@@ -211,17 +331,21 @@ export default function CartDrawer() {
 
           <div className="cart-summary-row">
             <span>Subtotal</span>
-            <span>₹{subtotal.toLocaleString('en-IN')}</span>
+            <span>₹{subtotal.toLocaleString("en-IN")}</span>
           </div>
           <div className="cart-summary-row">
             <span>Shipping</span>
-            <span>{shipping === 0 ? 'Complimentary' : `₹${shipping}`}</span>
+            <span>{shipping === 0 ? "Complimentary" : `₹${shipping}`}</span>
           </div>
           <div className="cart-total">
             <span>Total</span>
-            <strong>₹{total.toLocaleString('en-IN')}</strong>
+            <strong>₹{total.toLocaleString("en-IN")}</strong>
           </div>
-          <Link href="/checkout" className="checkout-btn" onClick={() => setIsDrawerOpen(false)}>
+          <Link
+            href="/checkout"
+            className="checkout-btn"
+            onClick={() => setIsDrawerOpen(false)}
+          >
             Proceed to Checkout
           </Link>
         </div>

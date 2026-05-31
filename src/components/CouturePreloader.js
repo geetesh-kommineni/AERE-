@@ -1,6 +1,6 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+"use client";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CouturePreloader() {
   const [loading, setLoading] = useState(true);
@@ -8,10 +8,10 @@ export default function CouturePreloader() {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Check if the preloader has already run in this session
-    const hasRun = sessionStorage.getItem('aere-preloader-seen');
-    if (hasRun === 'true') {
+    const hasRun = sessionStorage.getItem("aere-preloader-seen");
+    if (hasRun === "true") {
       setLoading(false);
       return;
     }
@@ -19,7 +19,7 @@ export default function CouturePreloader() {
     // Set timeout to complete load and slide open the curtains
     const timer = setTimeout(() => {
       setLoading(false);
-      sessionStorage.setItem('aere-preloader-seen', 'true');
+      sessionStorage.setItem("aere-preloader-seen", "true");
     }, 2800);
 
     return () => clearTimeout(timer);
@@ -30,16 +30,18 @@ export default function CouturePreloader() {
   return (
     <AnimatePresence>
       {loading && (
-        <motion.div className="curtain-loader" exit={{ pointerEvents: 'none' }}>
+        <motion.div className="curtain-loader" exit={{ pointerEvents: "none" }}>
           {/* Viewport stroke progress animation */}
-          <svg style={{
-            position: 'fixed',
-            inset: 0,
-            width: '100vw',
-            height: '100vh',
-            zIndex: 10002,
-            pointerEvents: 'none'
-          }}>
+          <svg
+            style={{
+              position: "fixed",
+              inset: 0,
+              width: "100vw",
+              height: "100vh",
+              zIndex: 10002,
+              pointerEvents: "none",
+            }}
+          >
             <motion.rect
               x="10"
               y="10"
@@ -50,7 +52,7 @@ export default function CouturePreloader() {
               strokeWidth="1.5"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
-              transition={{ duration: 2.2, ease: 'easeInOut' }}
+              transition={{ duration: 2.2, ease: "easeInOut" }}
             />
           </svg>
 
@@ -58,7 +60,7 @@ export default function CouturePreloader() {
           <motion.div
             className="curtain-gate-left"
             initial={{ x: 0 }}
-            exit={{ x: '-100%' }}
+            exit={{ x: "-100%" }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
           />
 
@@ -66,7 +68,7 @@ export default function CouturePreloader() {
           <motion.div
             className="curtain-gate-right"
             initial={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: "100%" }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
           />
 
@@ -78,17 +80,21 @@ export default function CouturePreloader() {
           >
             <motion.h1
               className="curtain-wordmark text-glow-gold"
-              initial={{ letterSpacing: '0.18em', opacity: 0, y: 15 }}
-              animate={{ letterSpacing: '0.35em', opacity: 1, y: 0 }}
+              initial={{ letterSpacing: "0.18em", opacity: 0, y: 15 }}
+              animate={{ letterSpacing: "0.35em", opacity: 1, y: 0 }}
               transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
             >
               AÉRE
             </motion.h1>
             <motion.p
               className="curtain-sub"
-              initial={{ opacity: 0, letterSpacing: '0.15em' }}
-              animate={{ opacity: 0.8, letterSpacing: '0.25em' }}
-              transition={{ duration: 1.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, letterSpacing: "0.15em" }}
+              animate={{ opacity: 0.8, letterSpacing: "0.25em" }}
+              transition={{
+                duration: 1.8,
+                delay: 0.4,
+                ease: [0.16, 1, 0.3, 1],
+              }}
             >
               Atelier Couture
             </motion.p>

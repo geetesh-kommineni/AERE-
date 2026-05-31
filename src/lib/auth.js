@@ -1,7 +1,9 @@
-import { SignJWT, jwtVerify } from 'jose';
-import bcrypt from 'bcryptjs';
+import { SignJWT, jwtVerify } from "jose";
+import bcrypt from "bcryptjs";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'aura-secret-key-2026-considered-fashion');
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || "aura-secret-key-2026-considered-fashion",
+);
 
 export async function hashPassword(password) {
   return bcrypt.hashSync(password, 10);
@@ -13,8 +15,8 @@ export async function comparePassword(password, hash) {
 
 export async function signToken(payload) {
   return new SignJWT(payload)
-    .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime('7d')
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("7d")
     .sign(JWT_SECRET);
 }
 
@@ -31,13 +33,13 @@ export async function getUserFromRequest(request) {
   let token = null;
 
   // 1. Try reading HTTP-Only cookie first
-  if (request.cookies && typeof request.cookies.get === 'function') {
-    token = request.cookies.get('token')?.value;
+  if (request.cookies && typeof request.cookies.get === "function") {
+    token = request.cookies.get("token")?.value;
   }
 
   // 2. Fall back to parsing the Cookie header manually
   if (!token) {
-    const cookieHeader = request.headers.get('cookie');
+    const cookieHeader = request.headers.get("cookie");
     if (cookieHeader) {
       const match = cookieHeader.match(/(?:^|;)\s*token\s*=\s*([^;]+)/);
       if (match) token = match[1];
@@ -46,9 +48,9 @@ export async function getUserFromRequest(request) {
 
   // 3. Fall back to Authorization Bearer header
   if (!token) {
-    const auth = request.headers.get('authorization');
-    if (auth && auth.startsWith('Bearer ')) {
-      token = auth.split(' ')[1];
+    const auth = request.headers.get("authorization");
+    if (auth && auth.startsWith("Bearer ")) {
+      token = auth.split(" ")[1];
     }
   }
 
@@ -59,11 +61,12 @@ export async function getUserFromRequest(request) {
 export async function getAdminFromRequest(request) {
   const payload = await getUserFromRequest(request);
   if (!payload) return null;
-  
-  const adminEmails = (process.env.ADMIN_EMAILS || 'admin@aere.com,admin@aura.com').split(',');
+
+  const adminEmails = (
+    process.env.ADMIN_EMAILS || "admin@aere.com,admin@aura.com"
+  ).split(",");
   if (adminEmails.includes(payload.email)) {
     return payload;
   }
   return null;
 }
-

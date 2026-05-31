@@ -1,13 +1,13 @@
-'use client';
-import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useCart } from '@/context/CartContext';
-import { useWishlist } from '@/context/WishlistContext';
-import { useToast } from '@/context/ToastContext';
-import { useAuth } from '@/context/AuthContext';
+"use client";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { useToast } from "@/context/ToastContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProductCard({ product, delay = 0 }) {
   const ref = useRef(null);
@@ -21,23 +21,29 @@ export default function ProductCard({ product, delay = 0 }) {
 
   let colorsList = [];
   try {
-    colorsList = typeof product.colors === 'string' ? JSON.parse(product.colors) : (product.colors || []);
+    colorsList =
+      typeof product.colors === "string"
+        ? JSON.parse(product.colors)
+        : product.colors || [];
   } catch (e) {
     colorsList = [];
   }
 
   let sizesList = [];
   try {
-    sizesList = typeof product.sizes === 'string' ? JSON.parse(product.sizes) : (product.sizes || []);
+    sizesList =
+      typeof product.sizes === "string"
+        ? JSON.parse(product.sizes)
+        : product.sizes || [];
   } catch (e) {
     sizesList = [];
   }
 
   const getProductImage = (index) => {
-    if (!product || !product.images) return '';
-    let rawUrl = '';
+    if (!product || !product.images) return "";
+    let rawUrl = "";
     let parsedImages = product.images;
-    if (typeof product.images === 'string') {
+    if (typeof product.images === "string") {
       try {
         parsedImages = JSON.parse(product.images);
       } catch (e) {
@@ -48,27 +54,27 @@ export default function ProductCard({ product, delay = 0 }) {
     if (Array.isArray(parsedImages)) {
       let activeIndex = index;
       if (hoverColor && colorsList.length > 1) {
-        const colorIndex = colorsList.findIndex(c => c.name === hoverColor);
+        const colorIndex = colorsList.findIndex((c) => c.name === hoverColor);
         if (colorIndex !== -1 && colorIndex < parsedImages.length) {
           activeIndex = (colorIndex + index) % parsedImages.length;
         }
       }
-      rawUrl = parsedImages[activeIndex] || '';
-    } else if (typeof parsedImages === 'object' && parsedImages !== null) {
+      rawUrl = parsedImages[activeIndex] || "";
+    } else if (typeof parsedImages === "object" && parsedImages !== null) {
       const activeColorKey = hoverColor || Object.keys(parsedImages)[0];
       const imagesForColor = parsedImages[activeColorKey] || [];
-      rawUrl = imagesForColor[index] || imagesForColor[0] || '';
+      rawUrl = imagesForColor[index] || imagesForColor[0] || "";
     }
 
     // Dynamically upgrade Unsplash images to ultra-high-definition (retina-ready w=2048, q=100)
-    if (rawUrl && rawUrl.includes('unsplash.com')) {
+    if (rawUrl && rawUrl.includes("unsplash.com")) {
       try {
         const url = new URL(rawUrl);
-        url.searchParams.set('w', '2048');
-        url.searchParams.set('q', '100');
+        url.searchParams.set("w", "2048");
+        url.searchParams.set("q", "100");
         return url.toString();
       } catch (e) {
-        return rawUrl.replace(/w=\d+/, 'w=2048').replace(/q=\d+/, 'q=100');
+        return rawUrl.replace(/w=\d+/, "w=2048").replace(/q=\d+/, "q=100");
       }
     }
     return rawUrl;
@@ -76,9 +82,9 @@ export default function ProductCard({ product, delay = 0 }) {
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
   });
-  
+
   // Smooth scroll parallax displacement inside the masked img wrapper
   const imageY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
 
@@ -86,8 +92,13 @@ export default function ProductCard({ product, delay = 0 }) {
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); observer.unobserve(el); } },
-      { threshold: 0.1 }
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("visible");
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -97,12 +108,12 @@ export default function ProductCard({ product, delay = 0 }) {
     e.preventDefault();
     e.stopPropagation();
     if (!isAuthenticated) {
-      showToast('Please sign in to add items to your bag.');
-      router.push('/auth');
+      showToast("Please sign in to add items to your bag.");
+      router.push("/auth");
       return;
     }
-    const activeColorName = hoverColor || colorsList[0]?.name || '';
-    addToCart(product, product.sizes?.[1] || 'M', activeColorName);
+    const activeColorName = hoverColor || colorsList[0]?.name || "";
+    addToCart(product, product.sizes?.[1] || "M", activeColorName);
     showToast(`${product.name} added to bag`);
   };
 
@@ -110,28 +121,48 @@ export default function ProductCard({ product, delay = 0 }) {
     e.preventDefault();
     e.stopPropagation();
     toggleWishlist(product.id);
-    showToast(wishlisted ? 'Removed from wishlist' : 'Added to wishlist');
+    showToast(wishlisted ? "Removed from wishlist" : "Added to wishlist");
   };
 
   return (
-    <Link ref={ref} href={`/products/${product.slug}`} className="product-card reveal" style={{ transitionDelay: `${delay}s` }}>
-      <div className="product-img-wrap cursor-view" style={{ position: 'relative', overflow: 'hidden' }}>
-        <motion.div style={{ y: imageY, height: '112%', width: '100%', position: 'absolute', top: '-6%', left: 0 }}>
-          <Image 
-            src={getProductImage(0) || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=2048&q=100&auto=format'} 
-            alt={product.name} 
+    <Link
+      ref={ref}
+      href={`/products/${product.slug}`}
+      className="product-card reveal"
+      style={{ transitionDelay: `${delay}s` }}
+    >
+      <div
+        className="product-img-wrap cursor-view"
+        style={{ position: "relative", overflow: "hidden" }}
+      >
+        <motion.div
+          style={{
+            y: imageY,
+            height: "112%",
+            width: "100%",
+            position: "absolute",
+            top: "-6%",
+            left: 0,
+          }}
+        >
+          <Image
+            src={
+              getProductImage(0) ||
+              "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=2048&q=100&auto=format"
+            }
+            alt={product.name}
             fill
             unoptimized={true}
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: "cover" }}
             className="product-img-primary"
           />
           {getProductImage(1) && (
-            <Image 
-              src={getProductImage(1)} 
-              alt={`${product.name} alternate view`} 
+            <Image
+              src={getProductImage(1)}
+              alt={`${product.name} alternate view`}
               fill
               unoptimized={true}
-              style={{ objectFit: 'cover' }}
+              style={{ objectFit: "cover" }}
               className="product-img-secondary"
             />
           )}
@@ -148,12 +179,14 @@ export default function ProductCard({ product, delay = 0 }) {
           </div>
         )}
 
-        {product.badge && <span className="product-badge">{product.badge}</span>}
-        
+        {product.badge && (
+          <span className="product-badge">{product.badge}</span>
+        )}
+
         {/* Magnetic Wishlist Button */}
-        <motion.button 
-          className={`wishlist-btn ${wishlisted ? 'active' : ''}`} 
-          onClick={handleWishlist} 
+        <motion.button
+          className={`wishlist-btn ${wishlisted ? "active" : ""}`}
+          onClick={handleWishlist}
           aria-label="Wishlist"
           whileHover={{ scale: 1.15 }}
           onMouseMove={(e) => {
@@ -166,11 +199,11 @@ export default function ProductCard({ product, delay = 0 }) {
             e.currentTarget.style.transform = `translate(0px, 0px) scale(1)`;
           }}
         >
-          {wishlisted ? '♥' : '♡'}
+          {wishlisted ? "♥" : "♡"}
         </motion.button>
 
-        <button 
-          className="quick-add" 
+        <button
+          className="quick-add"
           onClick={handleQuickAdd}
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
@@ -190,8 +223,10 @@ export default function ProductCard({ product, delay = 0 }) {
         <div className="product-meta">
           <span className="product-material">{product.material}</span>
           <span className="product-price">
-            {product.original_price && <s>₹{product.original_price.toLocaleString('en-IN')}</s>}
-            ₹{product.price.toLocaleString('en-IN')}
+            {product.original_price && (
+              <s>₹{product.original_price.toLocaleString("en-IN")}</s>
+            )}
+            ₹{product.price.toLocaleString("en-IN")}
           </span>
         </div>
 
@@ -202,7 +237,7 @@ export default function ProductCard({ product, delay = 0 }) {
               <button
                 key={idx}
                 type="button"
-                className={`product-card-swatch ${hoverColor === col.name || (!hoverColor && idx === 0) ? 'active' : ''}`}
+                className={`product-card-swatch ${hoverColor === col.name || (!hoverColor && idx === 0) ? "active" : ""}`}
                 style={{ backgroundColor: col.hex }}
                 onMouseEnter={() => setHoverColor(col.name)}
                 onMouseLeave={() => setHoverColor(null)}

@@ -1,5 +1,5 @@
-'use client';
-import Link from 'next/link';
+"use client";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -7,32 +7,55 @@ export default function Footer() {
       <div className="footer-top">
         <div className="footer-brand">
           <div className="footer-logo">
-            <Link href="/" className="footer-logo-link" aria-label="AÉRE Home">AÉRE</Link>
+            <Link href="/" className="footer-logo-link" aria-label="AÉRE Home">
+              AÉRE
+            </Link>
           </div>
-          <p>Considered fashion for the unhurried woman. Designed in India, worn everywhere.</p>
+          <p>
+            Considered fashion for the unhurried woman. Designed in India, worn
+            everywhere.
+          </p>
         </div>
         <div className="footer-col">
           <h4>Shop</h4>
           <ul>
-            <li><Link href="/products">New Arrivals</Link></li>
-            <li><Link href="/collections">Collections</Link></li>
-            <li><Link href="/products?sort=price-asc">Best Value</Link></li>
+            <li>
+              <Link href="/products">New Arrivals</Link>
+            </li>
+            <li>
+              <Link href="/collections">Collections</Link>
+            </li>
+            <li>
+              <Link href="/products?sort=price-asc">Best Value</Link>
+            </li>
           </ul>
         </div>
         <div className="footer-col">
           <h4>Company</h4>
           <ul>
-            <li><Link href="/our-story">Our Story</Link></li>
-            <li><Link href="/sustainability">Sustainability</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
+            <li>
+              <Link href="/our-story">Our Story</Link>
+            </li>
+            <li>
+              <Link href="/sustainability">Sustainability</Link>
+            </li>
+            <li>
+              <Link href="/contact">Contact</Link>
+            </li>
           </ul>
         </div>
         <div className="footer-col">
           <h4>Help</h4>
           <ul>
-            <li><Link href="/sizing-guide">Sizing Guide</Link></li>
-            <li><Link href="/shipping-returns">Shipping & Returns</Link></li>
-            <li><Link href="/contact">Care Instructions</Link></li>
+            <li>
+              <Link href="/sizing-guide">Sizing Guide</Link>
+            </li>
+            <li>
+              <Link href="/shipping-returns">Shipping & Returns</Link>
+            </li>
+            <li>
+              <Link href="/contact">Care Instructions</Link>
+            </li>
           </ul>
         </div>
       </div>
