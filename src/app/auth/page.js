@@ -84,7 +84,7 @@ export default function AuthPage() {
               className={`auth-tab ${tab === "login" ? "active" : ""}`}
               onClick={() => handleTabChange("login")}
             >
-              Sign In
+              Login
             </button>
             <button
               className={`auth-tab ${tab === "register" ? "active" : ""}`}
@@ -184,7 +184,7 @@ export default function AuthPage() {
               style={{ width: "100%", marginTop: "1rem" }}
             >
               {tab === "login"
-                ? "Sign In"
+                ? "Login"
                 : isOtpSent
                   ? "Verify & Create Account"
                   : "Continue"}
