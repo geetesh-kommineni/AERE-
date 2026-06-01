@@ -125,7 +125,7 @@ export default function Navbar() {
               </svg>
             </Link>
           ) : (
-            <Link href="/auth" className="icon-action" aria-label="Sign In">
+            <Link href="/auth" className="icon-action" aria-label="Login">
               <svg
                 width="18"
                 height="18"

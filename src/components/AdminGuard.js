@@ -126,7 +126,7 @@ export default function AdminGuard({ children }) {
               onMouseOver={(e) => (e.currentTarget.style.opacity = 0.9)}
               onMouseOut={(e) => (e.currentTarget.style.opacity = 1)}
             >
-              Sign In as Admin
+              Login as Admin
             </Link>
             <Link
               href="/"
